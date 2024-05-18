@@ -1,0 +1,104 @@
+@import "./mixins";
+.custom-calender {
+  font-family: inherit;
+  border-radius: 10px;
+  border: 1px solid var(--Dark-Dark-4, #c7c9d9);
+  background: var(--Light-Light-3, #fafafc);
+  overflow: hidden;
+  .react-datepicker__navigation {
+    top: 15px;
+    @include mobile() {
+      top: 12px;
+    }
+    &.react-datepicker__navigation--previous {
+      left: 15px;
+    }
+    &.react-datepicker__navigation--next {
+      right: 15px;
+    }
+  }
+  .react-datepicker__navigation-icon::before,
+  .react-datepicker__navigation-icon::after {
+    border-color: #378760;
+    border-width: 2px 2px 0 0;
+    height: 10px;
+    width: 10px;
+    @include mobile() {
+      height: 8px;
+      width: 8px;
+    }
+  }
+  .react-datepicker__header {
+    padding: 0;
+    background: transparent;
+    border: none;
+
+    .react-datepicker__current-month {
+      padding: 15px 16px;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      border-bottom: 1px solid var(--Light-Light-2, #f2f2f5);
+      @include mobile() {
+        padding: 15px 10px;
+        font-size: 16px;
+      }
+    }
+
+    .react-datepicker__day-names {
+      padding: 10px 10px 0 10px;
+      border: none;
+      @include mobile() {
+        padding: 10px 5px 0 5px;
+      }
+      .react-datepicker__day-name {
+        color: var(--Primary-Color, #378760);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        padding: 5px;
+        margin: 0;
+        min-width: 42px;
+        @include mobile() {
+          font-size: 12px;
+          padding: 5px;
+          min-width: 35px;
+        }
+      }
+    }
+  }
+  .react-datepicker__month {
+    padding: 15px 10px 10px 10px;
+    margin: 0;
+    @include mobile() {
+      padding: 10px 5px 5px 5px;
+    }
+    .react-datepicker__week {
+      .react-datepicker__day {
+        padding: 5px;
+        min-width: 42px;
+        color: var(--Text, #333);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        @include mobile() {
+          font-size: 12px;
+          padding: 5px;
+          min-width: 35px;
+        }
+        &.react-datepicker__day--disabled {
+          opacity: 0.4;
+        }
+        &.react-datepicker__day--in-range,
+        &.react-datepicker__day--keyboard-selected {
+          color: #fff;
+          border-radius: 99px;
+          background-color: var(--Primary-Color, #378760);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+@import "../../../styles/mixins";
+.area {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  @include mobile() {
+    padding: 100px 18px 40px;
+    align-items: start;
+  }
+}
+.leftUnderlay,
+.rightUnderlay,
+.rightShadow {
+  position: absolute;
+  z-index: -1;
+}
+.leftUnderlay {
+  left: 0;
+  bottom: 20px;
+  z-index: 1;
+}
+.rightUnderlay {
+  right: 0;
+  bottom: 20%;
+  z-index: 1;
+}
+.rightShadow {
+  background: rgba(249, 250, 251, 0.7);
+  backdrop-filter: blur(50px);
+  top: 0;
+  right: 0;
+  width:100%;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+}
+.card {
+  border-radius: 12px;
+  background: var(--Light-Light-4, #fff);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.topSection {
+  display: flex;
+  @include mobile() {
+    flex-direction: column;
+  }
+}
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  background: var(--Primary-Color, #378760);
+  padding: 15px 30px;
+  color: var(--White, #fff);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 21px;
+  text-transform: uppercase;
+  gap: 30px;
+  a {
+    text-decoration: underline;
+    color: white;
+  }
+}

@@ -1,0 +1,49 @@
+@import "../../../styles/mixins";
+.wrapper {
+  border-radius: 10px;
+  border: 1px solid var(--Primary-Color, #378760);
+  background: var(--Light-Light-4, #fff);
+  padding: 8px 12px;
+  min-width: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  min-height: 48px;
+  transition: all 0.2s ease-in-out;
+  @include mobile() {
+    padding: 8px 10px;
+    min-width: 300px;
+  }
+
+  p {
+    color: var(--Primary-Color, #378760);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 21px; /* 150% */
+    transition: all 0.2s ease-in-out;
+    @include mobile() {
+      font-size: 12px;
+    }
+  }
+  &.active {
+    justify-content: space-between;
+  }
+  &:hover,
+  &.active {
+    background: var(--Primary-Color, #378760);
+    p {
+      color: #fff;
+    }
+  }
+}
+.checkIcon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  @include mobile() {
+    width: 24px;
+    height: 24px;
+  }
+}
