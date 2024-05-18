@@ -38,6 +38,7 @@ const HomeWrapper = () => {
         };
         const response = await getTimeSlots(payload);
         if (response) {
+          console.log(response)
           setAvailableSlots(response);
         }
       }

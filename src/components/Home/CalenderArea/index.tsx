@@ -13,7 +13,16 @@ interface Props {
 }
 
 const CalenderArea: FC<Props> = ({ startDate, endDate, setDateRange }) => {
-  return (
+    const handleDateChange = (dates: [Date | null, Date | null]) => {
+        const [start, end] = dates;
+        if (start && end && start.getTime() === end.getTime()) {
+            setDateRange([start, start]);
+        } else {
+            setDateRange(dates);
+        }
+    };
+
+    return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Test Service</h2>
       <p className={styles.subTitle}>
@@ -25,7 +34,7 @@ const CalenderArea: FC<Props> = ({ startDate, endDate, setDateRange }) => {
           selectsRange
           startDate={startDate}
           endDate={endDate}
-          onChange={(dates: [Date | null, Date | null]) => setDateRange(dates)}
+          onChange={handleDateChange}
           minDate={new Date()}
           inline
         />
