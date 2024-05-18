@@ -23,6 +23,9 @@ This project is a React-based appointment scheduling application. Users can sele
 - react-datepicker
 - SCSS for styling
 
+## Demo
+[Link](https://appointment-booking-tau.vercel.app/)
+
 ## Setup and Installation
 
 ### Prerequisites
