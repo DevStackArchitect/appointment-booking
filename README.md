@@ -30,13 +30,27 @@ This project is a React-based appointment scheduling application. Users can sele
 - Node.js (v12 or later)
 - npm or yarn
 
+### Clone the Repository
+
+ ```bash
+    git clone https://github.com/DevStackArchitect/appointment-booking.git
+    cd appointment-booking
+  ```
+    
+ 
 
 1. **Create a `.env` file in the root directory and add the API base URL:**
+    ```bash
+   npm install
+   # or
+   yarn install
+    ``` 
+2. **Create a `.env` file in the root directory and add the API base URL:**
     ```env
-    REACT_APP_API_BASE_URL=https://api.example.com
+    REACT_APP_API_BASE_URL=https://app.appointo.me
     ```
 
-2. **Start the development server:**
+3. **Start the development server:**
     ```bash
     npm start
     # or
