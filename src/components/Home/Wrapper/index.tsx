@@ -13,7 +13,8 @@ import { motion } from "framer-motion";
 
 const HomeWrapper = () => {
   const today = new Date();
-
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     today,
     today,
@@ -22,6 +23,9 @@ const HomeWrapper = () => {
   const [availableSlots, setAvailableSlots] = useState<
     TimeSlotResponse[] | null
   >(null);
+  const [availableDays, setAvailableDays] = useState<TimeSlotResponse[] | null>(
+    null,
+  );
 
   const selectedSlot = useSelector(
     (state: RootState) => state.slot.selectedSlot,
@@ -30,15 +34,17 @@ const HomeWrapper = () => {
   const getSlotList = async () => {
     try {
       if (startDate && endDate) {
-        const formattedStartDate = formatDate(startDate) as string;
-        const formattedEndDate = formatDate(endDate) as string;
+        const formattedStartDate = formatDate(
+          startDate.toISOString(),
+        ) as string;
+        const formattedEndDate = formatDate(endDate.toISOString()) as string;
         const payload = {
           start: formattedStartDate,
           end: formattedEndDate,
         };
+
         const response = await getTimeSlots(payload);
         if (response) {
-          console.log(response)
           setAvailableSlots(response);
         }
       }
@@ -51,7 +57,37 @@ const HomeWrapper = () => {
     if (startDate && endDate) {
       getSlotList();
     }
+    getAvailableDaysForBooking(startOfMonth, endOfMonth);
   }, [dateRange]);
+
+  const getAvailableDaysForBooking = async (start: Date, end: Date) => {
+    try {
+      const formattedStartDate = formatDate(start.toISOString()) as string;
+      const formattedEndDate = formatDate(end.toISOString()) as string;
+      const payload = {
+        start: formattedStartDate,
+        end: formattedEndDate,
+      };
+
+      const response = await getTimeSlots(payload);
+      if (response) {
+        setAvailableDays((prevAvailableDays) => {
+          return prevAvailableDays
+            ? [...prevAvailableDays, ...response]
+            : response;
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleMonthChange = (date: Date) => {
+    const startOfNewMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const endOfNewMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    getAvailableDaysForBooking(startOfNewMonth, endOfNewMonth);
+  };
 
   const handleSlotConfirmation = () => {
     if (!selectedSlot) {
@@ -76,7 +112,9 @@ const HomeWrapper = () => {
           <CalenderArea
             startDate={startDate}
             endDate={endDate}
+            availableDays={availableDays}
             setDateRange={setDateRange}
+            onMonthChange={handleMonthChange}
           />
           <SlotSelection availableDates={availableSlots} />
         </div>

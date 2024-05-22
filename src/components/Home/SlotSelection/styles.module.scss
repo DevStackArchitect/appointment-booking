@@ -5,7 +5,6 @@
   @include mobile() {
     padding: 20px;
   }
-
 }
 .emptyState {
   color: var(--Primary-Color, #378760);
@@ -13,17 +12,20 @@
   font-style: normal;
   font-weight: 600;
   line-height: 21px; /* 150% */
+  height: 400px;
+  width: 380px;
 }
 .listContainer {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 500px;
+  height: 400px;
+  width: 380px;
   overflow-y: auto;
-    @include mobile() {
-        gap: 10px;
-      max-height: unset;
-    }
+  @include mobile() {
+    gap: 10px;
+    max-height: unset;
+  }
   .title {
     color: var(--Dark-Dark-2, #555770);
     font-size: 12px;
