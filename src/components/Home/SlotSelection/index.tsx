@@ -3,16 +3,20 @@ import { TimeSlotResponse } from "@/actions/Appointo";
 import { FC } from "react";
 import { formatDateToDayMonth } from "@/components/utils/dateFormat";
 import SlotCard from "@/components/Home/SlotCard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/actions/store";
 
-interface Props {
-  availableDates: TimeSlotResponse[] | null;
-}
-const SlotSelection: FC<Props> = ({ availableDates }) => {
+interface Props {}
+const SlotSelection: FC<Props> = ({}) => {
+  const availableSlots = useSelector(
+    (state: RootState) => state.slot.availableSlots,
+  );
+
   return (
     <div className={styles.wrapper}>
-      {availableDates && availableDates.length > 0 ? (
+      {availableSlots && availableSlots.length > 0 ? (
         <div className={styles.listContainer}>
-          {availableDates.map((availableDate, index) => {
+          {availableSlots?.map((availableDate, index) => {
             return (
               <div key={index}>
                 <h3 className={styles.title}>
@@ -21,7 +25,13 @@ const SlotSelection: FC<Props> = ({ availableDates }) => {
                 {availableDate.slots.length > 0 && (
                   <div className={styles.list}>
                     {availableDate.slots.map((slot, pointer) => {
-                      return <SlotCard key={pointer + index} time={slot} date={availableDate.date} />;
+                      return (
+                        <SlotCard
+                          key={pointer + index}
+                          time={slot}
+                          date={availableDate.date}
+                        />
+                      );
                     })}
                   </div>
                 )}

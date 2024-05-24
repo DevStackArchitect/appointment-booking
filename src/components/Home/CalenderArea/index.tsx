@@ -3,72 +3,96 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@/styles/calender.scss";
 import styles from "./styles.module.scss";
-import { TimeSlotResponse } from "@/actions/Appointo";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/actions/store";
+import {setAvailableSlots} from "@/reducers/slotSlice";
 
 interface Props {
-  startDate: Date | null;
-  endDate: Date | null;
-  setDateRange: React.Dispatch<
-    React.SetStateAction<[Date | null, Date | null]>
-  >;
-  availableDays?: TimeSlotResponse[] | null;
   onMonthChange: (date: Date) => void;
 }
 
-const CalenderArea: FC<Props> = ({
-  startDate,
-  endDate,
-  setDateRange,
-  availableDays,
-  onMonthChange,
-}) => {
-  const [availableDates, setAvailableDates] = useState<Date[]>([]);
+const CalenderArea: FC<Props> = ({ onMonthChange }) => {
+  const dispatch = useDispatch();
+  const today = new Date();
+  const availableDays = useSelector(
+      (state: RootState) => state.slot.availableDays,
+  );
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    today,
+    today,
+  ]);
+  const [startDate, endDate] = dateRange;
 
   useEffect(() => {
-    if (availableDays) {
-      const dates = availableDays.map((day) => new Date(day.date));
-      setAvailableDates(dates);
-    }
-  }, [availableDays]);
+    if (startDate && endDate) {
+      const dates = [];
+      let currentDate = new Date(startDate);
+      while (currentDate <= endDate) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
 
-  const handleDateChange = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    if (start && end && start.getTime() === end.getTime()) {
-      setDateRange([start, start]);
-    } else {
-      setDateRange(dates);
+      const slotsByDate = dates.reduce((acc, date) => {
+        const day = availableDays.find(day => {
+          const availableDate = new Date(day.date);
+          return (
+              availableDate.getDate() === date.getDate() &&
+              availableDate.getMonth() === date.getMonth() &&
+              availableDate.getFullYear() === date.getFullYear()
+          );
+        });
+
+        if (day) {
+          acc.push({
+            date: day.date,
+            slots: day.slots,
+          });
+        }
+
+        return acc;
+      }, [] as { date: string; slots: { start_time: string; end_time: string }[] }[]);
+
+      dispatch(setAvailableSlots(slotsByDate));
     }
-  };
+  }, [startDate, endDate, availableDays, dispatch]);
 
   const isDateAvailable = (date: Date) => {
-    return availableDates.some(
-      (availableDate) =>
-        availableDate.getDate() === date.getDate() &&
-        availableDate.getMonth() === date.getMonth() &&
-        availableDate.getFullYear() === date.getFullYear(),
+    return availableDays.some(
+        (availableDay) => {
+          const availableDate = new Date(availableDay.date);
+          return (
+              availableDate.getDate() === date.getDate() &&
+              availableDate.getMonth() === date.getMonth() &&
+              availableDate.getFullYear() === date.getFullYear()
+          );
+        }
     );
   };
 
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    setDateRange(dates);
+  };
+
   return (
-    <div className={styles.wrapper}>
-      <h2 className={styles.title}>Test Service</h2>
-      <p className={styles.subTitle}>
-        Timezone: <span>Asia/Calcutta</span>
-      </p>
-      <div className={styles.calenderContainer}>
-        <DatePicker
-          calendarClassName={"custom-calender"}
-          selectsRange
-          startDate={startDate}
-          endDate={endDate}
-          onChange={handleDateChange}
-          minDate={new Date()}
-          filterDate={isDateAvailable}
-          inline
-          onMonthChange={onMonthChange}
-        />
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>Test Service</h2>
+        <p className={styles.subTitle}>
+          Timezone: <span>Asia/Calcutta</span>
+        </p>
+        <div className={styles.calenderContainer}>
+          <DatePicker
+              calendarClassName={"custom-calender"}
+              selectsRange
+              startDate={startDate}
+              endDate={endDate}
+              onChange={handleDateChange}
+              minDate={new Date()}
+              filterDate={isDateAvailable}
+              inline
+              onMonthChange={onMonthChange}
+          />
+        </div>
       </div>
-    </div>
   );
 };
 

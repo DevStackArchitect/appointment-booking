@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC, useEffect} from "react";
 import { Slot } from "@/actions/Appointo";
 import { formatTimeRange } from "@/components/utils/dateFormat";
 import styles from "./styles.module.scss";
@@ -13,9 +13,10 @@ interface Props {
 }
 
 const SlotCard: FC<Props> = ({ time, date }) => {
+  const [active, setActive] = React.useState(false);
   const dispatch = useDispatch();
   const selectedSlot = useSelector(
-      (state: RootState) => state.slot.selectedSlot
+      (state: RootState) => state.slot.selectedDates
   );
 
   const formattedTimeRange = formatTimeRange(time.start_time, time.end_time);
@@ -24,9 +25,12 @@ const SlotCard: FC<Props> = ({ time, date }) => {
     dispatch(selectSlot({ date, slot: time }));
   };
 
+
   const isActive =
       selectedSlot?.date === date &&
       selectedSlot?.slot.start_time === time.start_time;
+
+
 
   return (
       <motion.article
